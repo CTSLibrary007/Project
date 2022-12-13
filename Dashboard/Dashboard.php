@@ -319,7 +319,7 @@
 				}
 			else {
 			?>
-
+			Hello guys chai pee lo
 			<!-- Admin functionalities will be shown here -->
 
 			<?php
