@@ -156,6 +156,9 @@ section > h2 {
 section > div {
     margin-top: 1.5rem;
 }
+
+/* Home Section for student */
+
 .gridbox {
     display: grid;
     gap: 2rem;
@@ -225,6 +228,23 @@ section > div {
     transition-delay: .2s;
 }
 
+/* Request section for Admin */
+
+#request-panel-options {
+    display: flex;
+    gap: 10px;
+}
+
+#request-panel-options > * {
+    padding: 5px 10px;
+}
+
+#request-panel-options > .active {
+    border-bottom: 5px solid #fff;
+    font-weight: bold;
+}
+
+/* Media queries */
 
 @media only screen and (max-width: 680px) {
     section {

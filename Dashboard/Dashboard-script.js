@@ -19,29 +19,25 @@ for(let i = 0;i<sideopt.length;i++) {
     }
 }
 
-const home = document.getElementById("home");
-const demandedbooks = document.getElementById("demanded-books");
-const borrowedbooks = document.getElementById("borrowed-books");
-const contentlist = document.querySelector(".sidebar").children[1];
-const listhome = contentlist.children[0];
-const listdemandedbooks = contentlist.children[1];
-const listborrowedbooks = contentlist.children[2];
 
-function setActiveClass(e,f) {
-    if(e.getBoundingClientRect().top<=70 && e.getBoundingClientRect().bottom>=70) {
-        if(f.className=="sideopt")
-        f.className="sideopt active";
+
+function setActiveClass(section, option) {
+    if(section.getBoundingClientRect().top<=70 && section.getBoundingClientRect().bottom>=70) {
+        if(option.className=="sideopt")
+        option.className="sideopt active";
     }
     else {
-        if(f.className=="sideopt active")
-        f.className="sideopt";
+        if(option.className=="sideopt active")
+        option.className="sideopt";
     }
 }
 
 document.addEventListener("scroll", function() {
-    setActiveClass(home,listhome);
-    setActiveClass(demandedbooks,listdemandedbooks);
-    setActiveClass(borrowedbooks,listborrowedbooks);
+    const contentlist = document.querySelector(".sidebar").lastElementChild.children;
+    const sections = document.querySelector(".main-content").children;
+    for (let i = 0; i < sections.length; i++) {
+        setActiveClass(sections[i],contentlist[i]);
+    }
 });
 
 // document.querySelector(".sidebar").onmousemove = function() {
@@ -71,3 +67,7 @@ for(let i = 0;i<srbi.length;i++) {
         }
     }
 }
+
+const requestpaneloptions = document.querySelector("#request-panel-options");
+const requestpanelrequests = document.querySelector("#request-panel-requests");
+

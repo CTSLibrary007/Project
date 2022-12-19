@@ -12,6 +12,8 @@
             </a>
         </li>
 
+        <!-- If screen size is very small then mini options will appear -->
+
         <li id="minoptions">
             <span class="icon-iconmonstr-menu-right-lined"></span>
             <ul id="minoption-optionlist">
@@ -74,12 +76,15 @@
                 <li class="minoption-optionlist-options">
                     <a class="show-contactus"><span class="fa fa-address-card"></span>Contact Us</a>
                 </li>
-                <!-- <li class="option-btns">
-                    <span id="light-icon" class="fa-regular fa-sun"></span><span id="dark-icon" class="fa-solid fa-moon"></span>
-                </li> -->
+                <li class="minoption-optionlist-options">
+                    <div id="light-icon-theme" class="icon"><ion-icon name="sunny-outline"></ion-icon>Light Theme</div>
+                    <div id="dark-icon-theme"><span class="fa-solid fa-moon"></span>Dark Theme</div>
+                </li>
 
             </ul>
         </li>
+
+        <!-- For medium to bigger screens -->
 
         <?php
             global $aboutflag;
@@ -227,18 +232,28 @@
         <?php
             }
             else {
-            ?>
-            <li id="session-btn" class="option-btns">
-                <div class="account">
-                    <span class="fa-solid fa-user-graduate"></span>
-                    <?php echo $_SESSION['name']; ?> 
-                </div>
-                <div class="dropdown">
-                    <a id="open-modal"><span class="icon"><ion-icon name="person-outline"></ion-icon></span>My Account</a>
-                    <a href="#"><span class="icon"><ion-icon name="settings-outline"></ion-icon></span></a>
-                    <a name = "logout" href="../Essential Kits/php/logout.php?logout=logout">  <span class="icon"><ion-icon name="log-out-outline"></ion-icon></span> Out</a>
-                </div>
-            </li>
+        ?>
+        <li id="session-btn" class="option-btns">
+            <div class="account">
+                <?php
+                    if ($_SESSION['role'] == 'student') {?>
+                <span class="fa-solid fa-user-graduate"></span>
+                <?php
+                    }
+                    else {
+                ?>
+                <span class="fa-solid fa-user-shield"></span>
+                <?php
+                    }
+                ?>
+                <?php echo $_SESSION['name']; ?> 
+            </div>
+            <div class="dropdown">
+                <a id="open-modal"><span class="icon"><ion-icon name="person-outline"></ion-icon></span>My Account</a>
+                <a href="#"><span class="icon"><ion-icon name="settings-outline"></ion-icon></span>Settings</a>
+                <a name = "logout" href="../Essential Kits/php/logout.php?logout=logout"><span class="icon"><ion-icon name="log-out-outline"></ion-icon></span>Sign Out</a>
+            </div>
+        </li>
         <?php
             }
         ?>

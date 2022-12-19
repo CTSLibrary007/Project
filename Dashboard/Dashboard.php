@@ -2,35 +2,37 @@
     include '../Essential Kits/php/conn.php';
     include "../Essential Kits/php/session.php";
     check_session();
-	if(isset($_GET['did']) and isset($_GET['dopt'])) {
-		$did = $_GET['did'];
-		$dopt = $_GET['dopt'];
-		if($dopt == "del") {
-			$dltq="DELETE FROM demand WHERE AccNo = '$did'";
-			$dltquery=mysqli_query($conn,$dltq);
-			$dltq="UPDATE books SET Status = 'Available' WHERE AccNo = '$did'";
-			$dltquery=mysqli_query($conn,$dltq);
-			header('location:Dashboard.php');
+	if ($_SESSION['role'] == 'student') {
+		if(isset($_GET['did']) and isset($_GET['dopt'])) {
+			$did = $_GET['did'];
+			$dopt = $_GET['dopt'];
+			if($dopt == "del") {
+				$dltq="DELETE FROM demand WHERE AccNo = '$did'";
+				$dltquery=mysqli_query($conn,$dltq);
+				$dltq="UPDATE books SET Status = 'Available' WHERE AccNo = '$did'";
+				$dltquery=mysqli_query($conn,$dltq);
+				header('location:Dashboard.php');
+			}
+			if($dopt == "borr") {
+				$borq="DELETE FROM demand WHERE AccNo = '$did'";
+				$borquery=mysqli_query($conn,$borq);
+				$borq="INSERT INTO borrowed (LibID, AccNo, `Group`) VALUES ('".$_SESSION['user']."', '$did', '".$_SESSION['group']."')";
+				$borquery=mysqli_query($conn,$borq);
+				$borq="UPDATE books SET Status = 'Borrowed' WHERE AccNo = '$did'";
+				$borquery=mysqli_query($conn,$borq);
+				header('location:Dashboard.php');
+			}
 		}
-		if($dopt == "borr") {
-			$borq="DELETE FROM demand WHERE AccNo = '$did'";
-			$borquery=mysqli_query($conn,$borq);
-			$borq="INSERT INTO borrowed (LibID, AccNo, `Group`) VALUES ('".$_SESSION['user']."', '$did', '".$_SESSION['group']."')";
-			$borquery=mysqli_query($conn,$borq);
-			$borq="UPDATE books SET Status = 'Borrowed' WHERE AccNo = '$did'";
-			$borquery=mysqli_query($conn,$borq);
-			header('location:Dashboard.php');
-		}
-	}
-    if(isset($_GET['bid']) and isset($_GET['bopt'])) {
-		$bid = $_GET['bid'];
-		$bopt = $_GET['bopt'];
-		if($bopt == "ret") {
-			$borq="DELETE FROM borrowed WHERE AccNo = '$bid'";
-			$borquery=mysqli_query($conn,$borq);
-			$borq="UPDATE books SET Status = 'Available' WHERE AccNo = '$bid'";
-			$borquery=mysqli_query($conn,$borq);
-			header('location:Dashboard.php');
+		if(isset($_GET['bid']) and isset($_GET['bopt'])) {
+			$bid = $_GET['bid'];
+			$bopt = $_GET['bopt'];
+			if($bopt == "ret") {
+				$borq="DELETE FROM borrowed WHERE AccNo = '$bid'";
+				$borquery=mysqli_query($conn,$borq);
+				$borq="UPDATE books SET Status = 'Available' WHERE AccNo = '$bid'";
+				$borquery=mysqli_query($conn,$borq);
+				header('location:Dashboard.php');
+			}
 		}
 	}
 ?>
@@ -41,8 +43,13 @@
     <?php include '../Essential Kits/php/Metadata.php'; ?>
     <link rel="stylesheet" href="../Essential Kits/css/Navbar.css">
     <link rel="stylesheet" href="../Essential Kits/css/Search Results.css">
-    <link rel="stylesheet" href="Dashboard-style.css">
-    <title>Welcome back <?php echo $_SESSION['name']?></title>
+    <link rel="stylesheet" href="./Dashboard-style.css">
+	<script src="../Essential Kits/js/Navbar.js" defer></script>
+    <script src="Dashboard-script.js" defer></script>
+    <script src="https://kit.fontawesome.com/bef3bec8c1.js" crossorigin="anonymous" defer></script>
+	<script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js" defer></script>
+	<script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js" defer></script>
+    <title>Welcome back <?php echo $_SESSION['name']; ?></title>
 </head>
 
 <body>
@@ -53,28 +60,79 @@
         <!-- <header>
             <h3><span class="fa-solid fa-bars"></span><div class="sideopt-text">Dashboard</div></h3>
         </header> -->
-		<?php
-			if ($_SESSION['role'] == 'student') {
-		?>
-        <ul>
-            <li class="sideopt active"><a href="#home"><b></b><b></b><span class="fa fa-home"></span><div class="sideopt-text"> Home</div></a></li>
-            <li class="sideopt"><a href="#demanded-books"><b></b><b></b><span class="fa fa-book"></span><div class="sideopt-text"> Demanded Books</div></a></li>
-            <li class="sideopt"><a href="#borrowed-books"><b></b><b></b><span class="fa fa-book"></span><div class="sideopt-text"> Borrowed Books</div></a></li>
+		<ul>
+			<?php
+				if ($_SESSION['role'] == 'student') {
+			?>
+            <li class="sideopt active">
+				<a href="#home">
+					<b></b><b></b>
+					<span class="fa fa-home"></span>
+					<div class="sideopt-text">Home</div>
+				</a>
+			</li>
+            <li class="sideopt">
+				<a href="#demanded-books">
+					<b></b><b></b>
+					<span class="fa fa-book"></span>
+					<div class="sideopt-text">Demanded Books</div>
+				</a>
+			</li>
+            <li class="sideopt">
+				<a href="#borrowed-books">
+					<b></b><b></b>
+					<span class="fa fa-book"></span>
+					<div class="sideopt-text">Borrowed Books</div>
+				</a>
+			</li>
+			<?php
+				}
+				else {
+			?>
+            <li class="sideopt active">
+				<a href="#home">
+					<b></b><b></b>
+					<span class="icon" style = "width: auto; padding-top: 3px;">
+						<ion-icon name="home"></ion-icon>
+					</span>
+					<div class="sideopt-text">Home</div>
+				</a>
+			</li>
+            <li class="sideopt">
+				<a href="#request">
+					<b></b><b></b>
+					<span class="icon" style = "width: auto; padding-top: 3px;">
+						<ion-icon name="arrow-undo"></ion-icon>
+					</span>
+					<div class="sideopt-text">Requests</div>
+				</a>
+			</li>
+            <li class="sideopt">
+				<a href="#book-management">
+					<b></b><b></b>
+					<span class="icon" style = "width: auto; padding-top: 3px;">
+						<ion-icon name="book"></ion-icon>
+					</span>
+					<div class="sideopt-text">Manage Books</div>
+				</a>
+			</li>
+			<li class="sideopt">
+				<a href="#notification">
+					<b></b><b></b>
+					<span class="icon" style = "width: auto; padding-top: 3px;">
+						<ion-icon name="notifications"></ion-icon>
+					</span>
+					<div class="sideopt-text">Notification</div>
+				</a>
+			</li>
+			<li class="sideopt">
+				<a href="#account-management">
+					<b></b><b></b>
+					<span class="icon" style = "width: auto; padding-top: 3px;"><ion-icon name="people"></ion-icon></span><div class="sideopt-text">Accounts</div></a></li>
+			<?php
+				}
+			?>
         </ul>
-		<?php
-			}
-			else {
-		?>
-		 <ul>
-            <li class="sideopt active"><a href="#home"><b></b><b></b><span class="icon"><ion-icon name="home-outline"></ion-icon></span><div class="sideopt-text"> Home</div></a></li>
-            <li class="sideopt"><a href="#request"><b></b><b></b><span class="icon"><ion-icon name="arrow-undo-outline"></ion-icon></span><div class="sideopt-text"> Request</div></a></li>
-            <li class="sideopt"><a href="#book-management"><b></b><b></b><span class="icon"><ion-icon name="book-outline"></ion-icon></span><div class="sideopt-text"> Book Management</div></a></li>
-			<li class="sideopt"><a href="#notification"><b></b><b></b><span class="icon"><ion-icon name="notifications-circle-outline"></ion-icon></span><div class="sideopt-text">Notificaion </div></a></li>
-			<li class="sideopt"><a href="#Account-Management"><b></b><b></b><span class="icon"><ion-icon name="people-outline"></ion-icon></span><div class="sideopt-text"> Accounts </div></a></li>
-        </ul>
-		<?php
-			}
-		?>
     </div>
     <div id="main-content">
         <div class="main-content">
@@ -319,19 +377,37 @@
 				}
 			else {
 			?>
+			<section id="home">
+				<h2>Hey <?php echo $_SESSION['name']; ?>,</h2>
+			</section>
+			<section id="request">
+				<h2>Requests<?php ?></h2>
+				<div id="request-panel">
+					<div id="request-panel-options">
+						<div id="demand-request-page" class="active">Demand Requests (<?php echo 0; ?>)</div>
+						<div id="borrow-request-page">Borrow Requests (<?php echo 0; ?>)</div>
+						<div id="group-request-page">Group Requests (<?php echo 0; ?>)</div>
+					</div>
+					<div id="request-panel-requests">
 
-			<!-- Admin functionalities will be shown here -->
+					</div>
+				</div>
+			</section>
+			<section id="book-management">
+				<h2>Books (<?php echo mysqli_num_rows($conn -> query("SELECT * FROM books")); ?>)</h2>
+			</section>
+			<section id="notification">
+				<h2>Notification Page</h2>
+				
+			</section>
+			<section id="account-management">
 
+			</section>
 			<?php
 			}
 			?>
         </div>
     </div>
-    <script src="../Essential Kits/js/Navbar.js"></script>
-    <script src="Dashboard-script.js"></script>
-    <script src="https://kit.fontawesome.com/bef3bec8c1.js" crossorigin="anonymous"></script>
-	<script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
-	<script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
 </body>
 
 </html>
