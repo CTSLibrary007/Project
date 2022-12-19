@@ -2,15 +2,36 @@
 
 let lighticon = document.querySelector("#light-icon");
 let darkicon = document.querySelector("#dark-icon");
+let lighticontheme = document.querySelector("#light-icon-theme");
+let darkicontheme = document.querySelector("#dark-icon-theme");
+
 darkicon.onclick = () => {
     document.body.classList.toggle("light-theme");
     darkicon.style.display = "none";
     lighticon.style.display = "inline-block";
+    darkicontheme.style.display = "none";
+    lighticon.style.display = "block";
 }
 lighticon.onclick = () => {
     document.body.classList.toggle("light-theme");
     darkicon.style.display = "inline-block";
     lighticon.style.display = "none";
+    darkicontheme.style.display = "block";
+    lighticontheme.style.display = "none";
+}
+darkicontheme.onclick = () => {
+    document.body.classList.toggle("light-theme");
+    darkicon.style.display = "none";
+    lighticon.style.display = "inline-block";
+    darkicontheme.style.display = "none";
+    lighticontheme.style.display = "block";
+}
+lighticontheme.onclick = () => {
+    document.body.classList.toggle("light-theme");
+    darkicon.style.display = "inline-block";
+    lighticon.style.display = "none";
+    darkicontheme.style.display = "block";
+    lighticontheme.style.display = "none";
 }
 
 //Toggling suboption list
